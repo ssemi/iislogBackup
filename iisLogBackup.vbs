@@ -70,9 +70,13 @@
 
 		'** ※ CDO sendmail 용 함수가 있음 - oCls.OutSendToMail()
 
-'		Dim strLogFileName : strLogFileName = oCls.LogFileName
-'		oCls.Sendmail "보내는사람<send@sendmail.com>", "받는사람<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & "백업이 되었습니다", "냉무",1, 1, 0
-
+		Dim strLogFileName : strLogFileName = oCls.LogFileName
+		'oCls.Sendmail "보내는사람<send@sendmail.com>", "받는사람<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & "백업이 되었습니다", "냉무",1, 1, 0
+		'oCls.OutSendToMail mailServer, mailServerPort, mailServerUseSSL, isAuth, user, password,  FromUN, FromUA, strTo, strSubject, strBody
+		
+		' Gmail CDO send mail
+		'Call oCls.OutSendToMail("smtp.gmail.com", 465, True, 1, "userid", "password", "senderName", "sendEmail", "ReceiveEmail", ToYMDDate(date()) & " " & strLogFileName & " Backup Complete", "Empty Body")
+		
 	SET oCls = Nothing
 
  
@@ -506,8 +510,11 @@ CLASS iisLogBackup
 	End Sub
 
 	'** CDO use SendMail
-	Public Function OutSendToMail(mailServer, FromUN, FromUA, strTo, strSubject, strBody)
-		IF Len(ToUser) = 0 OR isNumeric(ToUser) Then Exit Function
+	Public Function OutSendToMail(mailServer, mailServerPort, mailServerUseSSL, isAuth, user, password,  FromUN, FromUA, strTo, strSubject, strBody)
+		IF Len(strTo) = 0 OR isNumeric(strTo) Then Exit Function
+
+		Const cdoSendUsingPickup = 1 'Send message using the local SMTP service pickup directory. 
+		Const cdoSendUsingPort = 2 'Send the message using the network (SMTP over the network). 
 
 		DIM iMsg
 		DIM Flds
@@ -516,14 +523,18 @@ CLASS iisLogBackup
 		SET iMsg = CreateObject("CDO.Message")
 		SET iConf = CreateObject("CDO.Configuration")
 		SET Flds = iConf.Fields
-
-		Flds(cdoSendUsingMethod) = cdoSendUsingPort 
-		Flds(cdoSMTPServer) = mailServer
-		Flds(cdoSMTPServerPort) = 25
-		Flds(cdoSMTPAuthenticate) = cdoAnonymous
-		'Flds(cdoSendUserName) = "user"
-		'Flds(cdoSendPassword) = "password"
-		Flds(cdoURLGetLatestVersion) =  True
+		
+		Flds("http://schemas.microsoft.com/cdo/configuration/sendusing") = cdoSendUsingPort
+		Flds("http://schemas.microsoft.com/cdo/configuration/smtpserver") = mailServer
+		Flds("http://schemas.microsoft.com/cdo/configuration/smtpserverport") = iif(mailServerPort = "", 25, mailServerPort)
+		Flds("http://schemas.microsoft.com/cdo/configuration/smtpusessl") = mailServerUseSSL
+		Flds("http://schemas.microsoft.com/cdo/configuration/smtpconnectiontimeout") = 60
+		Flds("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate") = isAuth ' 2: cdoNTLM  1 : cdoBasic , 0 : cdoAnonymous
+		if isAuth > 0 Then
+			Flds("http://schemas.microsoft.com/cdo/configuration/sendusername") = user
+			Flds("http://schemas.microsoft.com/cdo/configuration/sendpassword") = password
+		End If
+		Flds("http://schemas.microsoft.com/cdo/configuration/urlgetlatestversion") =  True
 		Flds.Update
 
 		With iMsg
@@ -538,15 +549,6 @@ CLASS iisLogBackup
 
 		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]로 제목 : ["& strSubject &"] 메일을 보냈습니다")
 
-	End Function
-
-	' YYYY-MM-DD 형식으로 변경
-	Function ToYMDDate(dt)
-		dim s
-		s = datepart("yyyy",dt)
-		s = s & "-" & RIGHT("0" & datepart("m",dt),2)
-		s = s & "-" & RIGHT("0" & datepart("d",dt),2)
-		ToYMDDate = s
 	End Function
 
 	' duplicate file 처리
@@ -567,14 +569,23 @@ CLASS iisLogBackup
 		Loop
 		newFileName = name
 	End Function
-		
-	' statement ?  t : f
-	Function IIF(statement, t, f)
-		if (statement) Then
-			IIF = t
-		Else
-			IIF = f
-		End If
-	End Function
+	
 End Class
 
+' YYYY-MM-DD 형식으로 변경
+Function ToYMDDate(dt)
+	dim s
+	s = datepart("yyyy",dt)
+	s = s & "-" & RIGHT("0" & datepart("m",dt),2)
+	s = s & "-" & RIGHT("0" & datepart("d",dt),2)
+	ToYMDDate = s
+End Function
+	
+' statement ?  t : f
+Function IIF(statement, t, f)
+	if (statement) Then
+		IIF = t
+	Else
+		IIF = f
+	End If
+End Function
