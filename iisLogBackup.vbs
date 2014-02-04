@@ -1,39 +1,33 @@
 	'*****************************************************************************************************
-	'	Class 선언 및 옵션 설정	
+	'	Class Initialize & Option Settings
 	'*****************************************************************************************************
 	Option Explicit
 	Dim oCls
 	SET oCls = New iisLogBackup
 
 
-		'** iisLogBackup 클래스 내부에서 이뤄지는 프로세스를 로그 레포트로 남깁니다
-		'** 1 : 로그 레포트 남김 / 0 : 로그 레포트 남기지 않음
+		'** iisLogBackup Log Report
+		'** 1 : True 0 : False
 		oCls.LogReportWrite = 1 
 
 
-		'** 로그 파일이 들어 있는 폴더 (마지막 \ 꼭 붙여주시기 바랍니다)
+		'** Log Folder : Last character \ must be entered exactly.
 		oCls.SetLogFolder = "C:\inetpub\logs\LogFiles\W3SVC4\"
 		
 
-		'** 압축파일이 이동될 폴더    ||   Default : 현재 vbs 파일이 실행되는 폴더   "."
-		'** ex) D:\로그파일\홈페이지\2006년로그  ||  마지막 \ 꼭 빼주시기 바랍니다 
+		'** Archive zip file Save Folder
+		'** ex) D:\GitHub\iislogBackup  ||  last character \ must be removed.
 		oCls.SetMoveFolder = "D:\GitHub\iislogBackup" 
 
 		
-		'** iisLog 가 백업되는 파일 타입입니다 
-		'** iis 서버의 로그 파일 설정이 일일 단위 / 주간 단위 / 월간 단위 로그 백업인지 선택해주세요 
-		'** 1 : 일일 / 2 : 주간 / 3 : 월간
+		'** 1 : daily / 2 : weekly / 3 : monthly
 		oCls.LogType = 1
 		
-		'**  iisLogBackup을 실시할 기준이 되는 옵션을 설정합니다
-		'** 각각의 기준 옵션대로 파일이 생성됩니다.
-		'**  m : 월간 백업 기준 /   h : 15일(보름) 백업 기준 /  d: 1일(일일) 기준 / n : 강제 로그 백업 (Default : 현재날짜)
+		'**  m : month /   h : half month  /  d: day  / n : force
 		oCls.LogBackupOption = "m" 
 		
-		'** 로그파일을 백업할 파일명입니다
-		'** 파일형식은 zip형식입니다. (압축을 zip으로 하거든여)
-		'** yyyy // mm // dd // ww 의 인자가 존재합니다.
-		'** 인자 없이 사용하셔도 됩니다 - 강제 옵션(n)시 필요함
+		'** backup file - .zip 
+		'** yyyy // mm // dd // ww  parameters
 		'** ex) WEB-yymmdd.zip   result : WEB-060125.zip
 		'** ex) yyyymmdd.zip   result : 20060125.zip
 		'** ex) yyyymmdd_Logbackup.zip   result : 20060125_LogBackup.zip
@@ -41,62 +35,45 @@
 
 		oCls.LogBackupFileName = "WEBLog_yyyymmdd.zip"
 
-		'** 강제 로그 백업 
-		'** 이 프로퍼티는 단위 백업이 아닌 무제한 로그에 대한 백업을 진행하는데 유용하게 사용하실 수 있습니다
-		'** 인자로 강제 모드 지정하도록 변경
-		'** ex) iislogbackup abc_yyyymm.zip u_ex1401*.log 
-
+		'** force log backup
+		'** use argument ex) iislogbackup abc_yyyymm.zip u_ex1401*.log 
 		IF Wscript.Arguments.Length > 0 THEN
 			oCls.LogBackupOption = "n" 
 			oCls.LogBackupFileName = Wscript.Arguments.Item(0)
 			oCls.ForceLogFile = Wscript.Arguments.Item(1) '"u_ex1401*.log" 
 		End If
 
-		'** iisLogBackup 클래스 내부에서 이뤄지는 프로세스를 로그 레포트로 남깁니다
-		'** 1 : 로그 파일 삭제 / 0 : 로그 파일 삭제 안함
-		
+
+		'** iisLogBackup after file delete 
+		'** 1 : True  0 : False
 		oCls.LogFileDelete = 0 
 
+
 		'** iisLogBackup Class Execute
-		
 		oCls.Exec()
 		
 
-		'** 이 프로퍼티는 백업 후에 메일을 보내 실 수 있습니다
-		'** 각각을 설정해주시면 되겠습니다
-		'** 단 CDont.NewMail 을 이용함으로 Windows 2000 (Adv) Server에서 SMTP 서비스가 설치 되어있어야 합니다.
-		'** Windows 2003 일 경우는 DLL을 등록하시던지, CDO메일로 Source를 약간 수정하셔서 사용하시기 바랍니다
-		'** 사용시에는 주석을 제거 하고 사용하여 주세요
+		'** send Email
+		'** Windows 2003 : regsvr dll 
+		'Dim strLogFileName : strLogFileName = oCls.LogFileName
+		'oCls.Sendmail "sender<send@sendmail.com>", "receiver<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & " Backup Complete", "Empty body",1, 1, 0
 
-		'** ※ CDO sendmail 용 함수가 있음 - oCls.OutSendToMail()
-
-		Dim strLogFileName : strLogFileName = oCls.LogFileName
-		'oCls.Sendmail "보내는사람<send@sendmail.com>", "받는사람<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & "백업이 되었습니다", "냉무",1, 1, 0
-		'oCls.OutSendToMail mailServer, mailServerPort, mailServerUseSSL, isAuth, user, password,  FromUN, FromUA, strTo, strSubject, strBody
-		
 		' Gmail CDO send mail
-		'Call oCls.OutSendToMail("smtp.gmail.com", 465, True, 1, "userid", "password", "senderName", "sendEmail", "ReceiveEmail", ToYMDDate(date()) & " " & strLogFileName & " Backup Complete", "Empty Body")
+		'Call oCls.OutSendToMail("smtp.gmail.com", 465, True, 1, "userid", "password", "senderName", "sendEmail", "ReceiveEmail", now() & " " & strLogFileName & " Backup Complete", "Empty Body")
 		
 	SET oCls = Nothing
 
  
 
 '*****************************************************************************************************
+'	※ Class iisLogBackup Ver 1.2
 '
-'	※ 아래 부터는 클래스 내용입니다. 
-'	수정하실 수 있는 능력이 있으신 분들은 수정하셔서 더 좋게 사용하셔도 무방합니다 :)
-'	좀 더 좋은 아이디어 있으신 분들 Contact 해주세요!!!
-'	
-'	Class iisLogBackup Ver 1.2
-'
-'	귀차니즘 때문에 만들게 된 iisLogBackup Script
-'	로그 파일 압축 그리고 삭제를 마우스 클릭하느라 힘들었던 손가락에게 이 영광을...
-'	windows server administrator 에게 평화와 안식을 바라며......
+'	iisLogBackup Script
 '
 '	2006. 01. 25.			modify : 2006. 12. 29.
 '	Contact : Ssemi™	(http://www.ssemi.net)
 '	
-'	Dev Blog : http://ssemi.tistory.com
+'	https://github.com/ssemi/iislogBackup
 '*****************************************************************************************************
 
 
@@ -108,14 +85,14 @@ CLASS iisLogBackup
 	
 	'----------------------------------------------------------------------------------------------------
 	
-	'** 각종 객체 변수
+	'** Objects
 	Dim Shell
 	Dim FSO
 	Dim Folder
 	Dim File
 	Dim WshShell
 	
-	'** 공통 Member 변수
+	'** Common Member
 	Private CMD
 	Private isLogFile
 	Private m_FolderName
@@ -123,7 +100,7 @@ CLASS iisLogBackup
 	Private m_LogFile
 	Private PathHere 
 
-	'** 실제로 프로퍼티의 값을 보관할 Member 변수
+	'** Use Member
     Private m_LogType
     Private m_LogBackupOption
 	Private m_ForceLogFile
@@ -133,7 +110,6 @@ CLASS iisLogBackup
 
 	'----------------------------------------------------------------------------------------------------
 
-	'** 프로퍼티에 값을 설정할 때 호출된다.
     Public Property Let LogType(strArg)
 		m_LogType = strArg
 	End Property
@@ -162,7 +138,7 @@ CLASS iisLogBackup
 		IF FSO.FolderExists(strArg) Then
 			SET Folder = FSO.GetFolder(strArg) 
 		ELSE
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) & "[" & strArg &"] 폴더가 존재하지 않습니다")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) & "[" & strArg &"] Folder does not exists.")
 		End IF
 		m_FolderName = strArg
 	End Property
@@ -170,21 +146,19 @@ CLASS iisLogBackup
 	Public Property Let SetMoveFolder(strArg) 
 		IF NOT FSO.FolderExists(strArg) Then
 			FSO.CreateFolder(strArg) 
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) &"압축한 파일을 이동할 [" & strArg &"] 폴더 생성")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) &"Archive File Move Folder [" & strArg &"] Created.")
 		End IF
 		m_moveFolderName = strArg
 	End Property	
 
 	'----------------------------------------------------------------------------------------------------
 	
-	'** 프로퍼티에서 값을 읽어갈 때 호출된다.
     Public Property Get LogFileName()
       LogFileName = m_LogBackupFileName
     End Property
 
 	'----------------------------------------------------------------------------------------------------
 	
-	'** 로그 파일 체크
 	Private Function ExistsLogFile()
 
 		IF isObject(Folder) Then
@@ -204,14 +178,13 @@ CLASS iisLogBackup
 	End Function 
 
 
-	'** 로그 파일 포맷팅
 	Private Function changeFormat(str)
 	
 		Dim tempstr, currentWeek
 		
 		Select Case Lcase(m_LogBackupOption)
 
-			Case "m" :  '한달
+			Case "m" :  'month
 				tempstr = DateAdd("m", -1 , ToYMDDate(date()))
 				currentWeek = "0" & Cstr(DatePart("ww", tempstr) - DatePart("ww", Year(tempstr) & "-" & Month(tempstr) & "-01") + 1)
 
@@ -221,7 +194,7 @@ CLASS iisLogBackup
 				str = Replace(str, "ww", "")
 				str = Replace(str, "dd", "")
 
-			Case "h" : ' 보름
+			Case "h" : ' half month
 				tempstr = DateAdd("d", -15 , ToYMDDate(date()))
 				currentWeek = "0" & Cstr(DatePart("ww", tempstr) - DatePart("ww", Year(tempstr) & "-" & Month(tempstr) & "-01") + 1)
 
@@ -236,14 +209,14 @@ CLASS iisLogBackup
 					str = Replace(str, "ww", "half_1")
 				End IF
 				
-			Case "d" :  ' 1일
+			Case "d" :  ' day
 				tempstr = DateAdd("d", -1 , ToYMDDate(date()))
 				str = Replace(str, "yyyy", Split(tempstr, "-")(0))
 				str = Replace(str, "yy", Right(Split(tempstr, "-")(0), 2))
 				str = Replace(str, "mm", Split(tempstr, "-")(1))
 				str = Replace(str, "dd", Split(tempstr, "-")(2))
 
-			Case "n" :  ' 강제
+			Case "n" :  ' force
 				currentWeek = "0" & Cstr(DatePart("ww", ToYMDDate(date())) - DatePart("ww", Year(ToYMDDate(date())) & "-" & Month(ToYMDDate(date())) & "-01") + 1)  & "w"
 				str = Replace(str, "yyyy", Split(ToYMDDate(date()), "-")(0))
 				str = Replace(str, "yy", Right(Split(ToYMDDate(date()), "-")(0), 2))
@@ -264,21 +237,19 @@ CLASS iisLogBackup
 	End Function
 
 
-	'** 로그 파일 코디네이터
 	Private Sub LogFileCoordinator()
 
 		Dim tmp, standard
 		Dim y, m, d, w
 
-		' 로그백업옵션을 통한 기준일 생성
 		Select Case Lcase(m_LogBackupOption)
-			Case "m" : '한달 month
+			Case "m" : 
 				standard = DateAdd("m", -1 , ToYMDDate(date()))
-			Case "h" :  '15일 보름
+			Case "h" : 
 				standard = DateAdd("d", -15, ToYMDDate(date()))
-			Case "d" :  '1일 day
+			Case "d" : 
 				standard = DateAdd("d", -1 , ToYMDDate(date()))
-			Case "n" :  '강제 non
+			Case "n" : 
 				standard = ToYMDDate(date())
 		End Select
 
@@ -287,7 +258,7 @@ CLASS iisLogBackup
 		IF Cstr(d) < 10 Then d = "0" & Cstr(d) ELSE d = Cstr(d) End IF
 		IF Cstr(w) < 10 Then w = "0" & Cstr(w) ELSE w = Cstr(w) End IF
 
-		' 로그백업 타켓파일명 생성
+		' target log file name 
 		Dim min , max, i 
 		Select Case Lcase(m_LogBackupOption)
 			Case "m" : 
@@ -350,7 +321,7 @@ CLASS iisLogBackup
 '					Next
 					'----------------------------------------------------------------------------------------
 				ELSE
-					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLog의 백업된 파일 타입 설정이 [일일 기준] or [주 기준]이 아닙니다")
+					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLog Backup Type is NOT ""d"" or ""w""")
 
 				End IF
 
@@ -361,7 +332,7 @@ CLASS iisLogBackup
 					m_LogFile = "u_ex" & y & m & d & ".log"
 					Call LogFileBackup(m_LogBackupFileName, m_FolderName & m_LogFile, "a -tzip")
 				ELSE
-					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLog의 백업된 파일 타입 설정이 [일일 기준]이 아닙니다")
+					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLog Backup Type is NOT ""d"".")
 				End IF
 
 			Case "n" : 
@@ -387,7 +358,6 @@ CLASS iisLogBackup
 
 
 
-	'** 로그 파일 백업 프로시져
 	Private Sub LogFileBackup(zip, target, typeOption)
 		'IF FSO.FileExists(target) Then
 			
@@ -397,25 +367,24 @@ CLASS iisLogBackup
 			Shell.Run cmd , , True
 
 			IF typeOption = "u" Then
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] 파일을 ["& zip &"] 파일로 압축 <업데이트>")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] ====> ["& zip &"] Archived. <UPDATE>")
 			ELSE
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] 파일을 ["& zip &"] 파일로 압축 성공")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] ====> ["& zip &"] Archived.")
 			End IF
 
 			' log file del
 			IF m_logBackupAfterDelete = 1 Then
 				FSO.DELETEFILE target, True
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] 파일을 삭제하였습니다")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] Deleted.")
 			End IF
 		'ELSE
-			'IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & target & "] 파일을 찾을 수가 없습니다")
+			'IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & target & "] does not exists.")
 		'End IF
 	End Sub
 
 
-	'** 로그 백업 실행
 	Public Sub Exec()
-		'강제 모드일 때 파일 이름 없으면 에러 
+		' forcemode arguments error check
 		IF m_LogBackupOption = "n" AND Len(m_ForceLogFile) = 0  Then
 			Wscript.Echo "No File parameter was passed ( force mode )"
 			Call TerminateClass
@@ -435,13 +404,13 @@ CLASS iisLogBackup
 					IF NOT FSO.FileExists(m_moveFolderName & "\" & m_LogBackupFileName) Then
 						Call ErrorReport(NOW() & chr(9) & "Move " & PathHere & "\" & m_LogBackupFileName & ", " & m_moveFolderName & "\" )
 						FSO.MoveFile PathHere & "\" & m_LogBackupFileName , m_moveFolderName & "\" 
-						IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & PathHere & "\" & m_LogBackupFileName &"] 파일이 ["& m_moveFolderName &"]로 이동되었습니다")
+						IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "From [" & PathHere & "\" & m_LogBackupFileName &"] To ["& m_moveFolderName &"] Moved.")
 					End IF
 				End IF
 			End IF
 
 		ELSE
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& m_FolderName &"] 폴더에 로그 파일이 존재하지 않습니다")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& m_FolderName &"] Folder does not Exists.")
 		End IF
 
 		IF m_LogReportWrite = 1 Then Call ErrorReport(String(100, "-"))
@@ -505,7 +474,7 @@ CLASS iisLogBackup
 			objSendMail.Importance = Importance ' 0 low / 1 normal / 2 importance
 			objSendMail.Send
 			SET objSendMail = Nothing
-		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]로 제목 : ["& strSubject &"] 메일을 보냈습니다")
+		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "To ["& strTo &"] : ["& strSubject &"] sended.")
 
 	End Sub
 
@@ -547,11 +516,11 @@ CLASS iisLogBackup
 			.Send
 		End With
 
-		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]로 제목 : ["& strSubject &"] 메일을 보냈습니다")
+		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "To ["& strTo &"] : ["& strSubject &"] sended.")
 
 	End Function
 
-	' duplicate file 처리
+	' duplicate file process
 	Function newFileName(name)
 		Dim Num : Num = 1
 		Dim tempNum, removeNo, tmpFile
@@ -572,7 +541,7 @@ CLASS iisLogBackup
 	
 End Class
 
-' YYYY-MM-DD 형식으로 변경
+' change date to YYYY-MM-DD
 Function ToYMDDate(dt)
 	dim s
 	s = datepart("yyyy",dt)
