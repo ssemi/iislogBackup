@@ -186,6 +186,7 @@ CLASS iisLogBackup
 
 			Case "m" :  'month
 				tempstr = DateAdd("m", -1 , ToYMDDate(date()))
+				tempstr = ToYMDDate(tempstr)
 				currentWeek = "0" & Cstr(DatePart("ww", tempstr) - DatePart("ww", Year(tempstr) & "-" & Month(tempstr) & "-01") + 1)
 
 				str = Replace(str, "yyyy", Split(tempstr, "-")(0))
