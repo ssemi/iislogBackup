@@ -1,39 +1,39 @@
 	'*****************************************************************************************************
-	'	Class ¼±¾ğ ¹× ¿É¼Ç ¼³Á¤	
+	'	Class ì„ ì–¸ ë° ì˜µì…˜ ì„¤ì •	
 	'*****************************************************************************************************
 	Option Explicit
 	Dim oCls
 	SET oCls = New iisLogBackup
 
 
-		'** iisLogBackup Å¬·¡½º ³»ºÎ¿¡¼­ ÀÌ·ïÁö´Â ÇÁ·Î¼¼½º¸¦ ·Î±× ·¹Æ÷Æ®·Î ³²±é´Ï´Ù
-		'** 1 : ·Î±× ·¹Æ÷Æ® ³²±è / 0 : ·Î±× ·¹Æ÷Æ® ³²±âÁö ¾ÊÀ½
+		'** iisLogBackup í´ë˜ìŠ¤ ë‚´ë¶€ì—ì„œ ì´ë¤„ì§€ëŠ” í”„ë¡œì„¸ìŠ¤ë¥¼ ë¡œê·¸ ë ˆí¬íŠ¸ë¡œ ë‚¨ê¹ë‹ˆë‹¤
+		'** 1 : ë¡œê·¸ ë ˆí¬íŠ¸ ë‚¨ê¹€ / 0 : ë¡œê·¸ ë ˆí¬íŠ¸ ë‚¨ê¸°ì§€ ì•ŠìŒ
 		oCls.LogReportWrite = 1 
 
 
-		'** ·Î±× ÆÄÀÏÀÌ µé¾î ÀÖ´Â Æú´õ (¸¶Áö¸· \ ²À ºÙ¿©ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù)
+		'** ë¡œê·¸ íŒŒì¼ì´ ë“¤ì–´ ìˆëŠ” í´ë” (ë§ˆì§€ë§‰ \ ê¼­ ë¶™ì—¬ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤)
 		oCls.SetLogFolder = "C:\inetpub\logs\LogFiles\W3SVC4\"
 		
 
-		'** ¾ĞÃàÆÄÀÏÀÌ ÀÌµ¿µÉ Æú´õ    ||   Default : ÇöÀç vbs ÆÄÀÏÀÌ ½ÇÇàµÇ´Â Æú´õ   "."
-		'** ex) D:\·Î±×ÆÄÀÏ\È¨ÆäÀÌÁö\2006³â·Î±×  ||  ¸¶Áö¸· \ ²À »©ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù 
+		'** ì••ì¶•íŒŒì¼ì´ ì´ë™ë  í´ë”    ||   Default : í˜„ì¬ vbs íŒŒì¼ì´ ì‹¤í–‰ë˜ëŠ” í´ë”   "."
+		'** ex) D:\ë¡œê·¸íŒŒì¼\í™ˆí˜ì´ì§€\2006ë…„ë¡œê·¸  ||  ë§ˆì§€ë§‰ \ ê¼­ ë¹¼ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤ 
 		oCls.SetMoveFolder = "D:\GitHub\iislogBackup" 
 
 		
-		'** iisLog °¡ ¹é¾÷µÇ´Â ÆÄÀÏ Å¸ÀÔÀÔ´Ï´Ù 
-		'** iis ¼­¹öÀÇ ·Î±× ÆÄÀÏ ¼³Á¤ÀÌ ÀÏÀÏ ´ÜÀ§ / ÁÖ°£ ´ÜÀ§ / ¿ù°£ ´ÜÀ§ ·Î±× ¹é¾÷ÀÎÁö ¼±ÅÃÇØÁÖ¼¼¿ä 
-		'** 1 : ÀÏÀÏ / 2 : ÁÖ°£ / 3 : ¿ù°£
+		'** iisLog ê°€ ë°±ì—…ë˜ëŠ” íŒŒì¼ íƒ€ì…ì…ë‹ˆë‹¤ 
+		'** iis ì„œë²„ì˜ ë¡œê·¸ íŒŒì¼ ì„¤ì •ì´ ì¼ì¼ ë‹¨ìœ„ / ì£¼ê°„ ë‹¨ìœ„ / ì›”ê°„ ë‹¨ìœ„ ë¡œê·¸ ë°±ì—…ì¸ì§€ ì„ íƒí•´ì£¼ì„¸ìš” 
+		'** 1 : ì¼ì¼ / 2 : ì£¼ê°„ / 3 : ì›”ê°„
 		oCls.LogType = 1
 		
-		'**  iisLogBackupÀ» ½Ç½ÃÇÒ ±âÁØÀÌ µÇ´Â ¿É¼ÇÀ» ¼³Á¤ÇÕ´Ï´Ù
-		'** °¢°¢ÀÇ ±âÁØ ¿É¼Ç´ë·Î ÆÄÀÏÀÌ »ı¼ºµË´Ï´Ù.
-		'**  m : ¿ù°£ ¹é¾÷ ±âÁØ /   h : 15ÀÏ(º¸¸§) ¹é¾÷ ±âÁØ /  d: 1ÀÏ(ÀÏÀÏ) ±âÁØ / n : °­Á¦ ·Î±× ¹é¾÷ (Default : ÇöÀç³¯Â¥)
+		'**  iisLogBackupì„ ì‹¤ì‹œí•  ê¸°ì¤€ì´ ë˜ëŠ” ì˜µì…˜ì„ ì„¤ì •í•©ë‹ˆë‹¤
+		'** ê°ê°ì˜ ê¸°ì¤€ ì˜µì…˜ëŒ€ë¡œ íŒŒì¼ì´ ìƒì„±ë©ë‹ˆë‹¤.
+		'**  m : ì›”ê°„ ë°±ì—… ê¸°ì¤€ /   h : 15ì¼(ë³´ë¦„) ë°±ì—… ê¸°ì¤€ /  d: 1ì¼(ì¼ì¼) ê¸°ì¤€ / n : ê°•ì œ ë¡œê·¸ ë°±ì—… (Default : í˜„ì¬ë‚ ì§œ)
 		oCls.LogBackupOption = "m" 
 		
-		'** ·Î±×ÆÄÀÏÀ» ¹é¾÷ÇÒ ÆÄÀÏ¸íÀÔ´Ï´Ù
-		'** ÆÄÀÏÇü½ÄÀº zipÇü½ÄÀÔ´Ï´Ù. (¾ĞÃàÀ» zipÀ¸·Î ÇÏ°Åµç¿©)
-		'** yyyy // mm // dd // ww ÀÇ ÀÎÀÚ°¡ Á¸ÀçÇÕ´Ï´Ù.
-		'** ÀÎÀÚ ¾øÀÌ »ç¿ëÇÏ¼Åµµ µË´Ï´Ù - °­Á¦ ¿É¼Ç(n)½Ã ÇÊ¿äÇÔ
+		'** ë¡œê·¸íŒŒì¼ì„ ë°±ì—…í•  íŒŒì¼ëª…ì…ë‹ˆë‹¤
+		'** íŒŒì¼í˜•ì‹ì€ zipí˜•ì‹ì…ë‹ˆë‹¤. (ì••ì¶•ì„ zipìœ¼ë¡œ í•˜ê±°ë“ ì—¬)
+		'** yyyy // mm // dd // ww ì˜ ì¸ìê°€ ì¡´ì¬í•©ë‹ˆë‹¤.
+		'** ì¸ì ì—†ì´ ì‚¬ìš©í•˜ì…”ë„ ë©ë‹ˆë‹¤ - ê°•ì œ ì˜µì…˜(n)ì‹œ í•„ìš”í•¨
 		'** ex) WEB-yymmdd.zip   result : WEB-060125.zip
 		'** ex) yyyymmdd.zip   result : 20060125.zip
 		'** ex) yyyymmdd_Logbackup.zip   result : 20060125_LogBackup.zip
@@ -41,9 +41,9 @@
 
 		oCls.LogBackupFileName = "WEBLog_yyyymmdd.zip"
 
-		'** °­Á¦ ·Î±× ¹é¾÷ 
-		'** ÀÌ ÇÁ·ÎÆÛÆ¼´Â ´ÜÀ§ ¹é¾÷ÀÌ ¾Æ´Ñ ¹«Á¦ÇÑ ·Î±×¿¡ ´ëÇÑ ¹é¾÷À» ÁøÇàÇÏ´Âµ¥ À¯¿ëÇÏ°Ô »ç¿ëÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù
-		'** ÀÎÀÚ·Î °­Á¦ ¸ğµå ÁöÁ¤ÇÏµµ·Ï º¯°æ
+		'** ê°•ì œ ë¡œê·¸ ë°±ì—… 
+		'** ì´ í”„ë¡œí¼í‹°ëŠ” ë‹¨ìœ„ ë°±ì—…ì´ ì•„ë‹Œ ë¬´ì œí•œ ë¡œê·¸ì— ëŒ€í•œ ë°±ì—…ì„ ì§„í–‰í•˜ëŠ”ë° ìœ ìš©í•˜ê²Œ ì‚¬ìš©í•˜ì‹¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤
+		'** ì¸ìë¡œ ê°•ì œ ëª¨ë“œ ì§€ì •í•˜ë„ë¡ ë³€ê²½
 		'** ex) iislogbackup abc_yyyymm.zip u_ex1401*.log 
 
 		IF Wscript.Arguments.Length > 0 THEN
@@ -52,8 +52,8 @@
 			oCls.ForceLogFile = Wscript.Arguments.Item(1) '"u_ex1401*.log" 
 		End If
 
-		'** iisLogBackup Å¬·¡½º ³»ºÎ¿¡¼­ ÀÌ·ïÁö´Â ÇÁ·Î¼¼½º¸¦ ·Î±× ·¹Æ÷Æ®·Î ³²±é´Ï´Ù
-		'** 1 : ·Î±× ÆÄÀÏ »èÁ¦ / 0 : ·Î±× ÆÄÀÏ »èÁ¦ ¾ÈÇÔ
+		'** iisLogBackup í´ë˜ìŠ¤ ë‚´ë¶€ì—ì„œ ì´ë¤„ì§€ëŠ” í”„ë¡œì„¸ìŠ¤ë¥¼ ë¡œê·¸ ë ˆí¬íŠ¸ë¡œ ë‚¨ê¹ë‹ˆë‹¤
+		'** 1 : ë¡œê·¸ íŒŒì¼ ì‚­ì œ / 0 : ë¡œê·¸ íŒŒì¼ ì‚­ì œ ì•ˆí•¨
 		
 		oCls.LogFileDelete = 0 
 
@@ -62,16 +62,16 @@
 		oCls.Exec()
 		
 
-		'** ÀÌ ÇÁ·ÎÆÛÆ¼´Â ¹é¾÷ ÈÄ¿¡ ¸ŞÀÏÀ» º¸³» ½Ç ¼ö ÀÖ½À´Ï´Ù
-		'** °¢°¢À» ¼³Á¤ÇØÁÖ½Ã¸é µÇ°Ú½À´Ï´Ù
-		'** ´Ü CDont.NewMail À» ÀÌ¿ëÇÔÀ¸·Î Windows 2000 (Adv) Server¿¡¼­ SMTP ¼­ºñ½º°¡ ¼³Ä¡ µÇ¾îÀÖ¾î¾ß ÇÕ´Ï´Ù.
-		'** Windows 2003 ÀÏ °æ¿ì´Â DLLÀ» µî·ÏÇÏ½Ã´øÁö, CDO¸ŞÀÏ·Î Source¸¦ ¾à°£ ¼öÁ¤ÇÏ¼Å¼­ »ç¿ëÇÏ½Ã±â ¹Ù¶ø´Ï´Ù
-		'** »ç¿ë½Ã¿¡´Â ÁÖ¼®À» Á¦°Å ÇÏ°í »ç¿ëÇÏ¿© ÁÖ¼¼¿ä
+		'** ì´ í”„ë¡œí¼í‹°ëŠ” ë°±ì—… í›„ì— ë©”ì¼ì„ ë³´ë‚´ ì‹¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤
+		'** ê°ê°ì„ ì„¤ì •í•´ì£¼ì‹œë©´ ë˜ê² ìŠµë‹ˆë‹¤
+		'** ë‹¨ CDont.NewMail ì„ ì´ìš©í•¨ìœ¼ë¡œ Windows 2000 (Adv) Serverì—ì„œ SMTP ì„œë¹„ìŠ¤ê°€ ì„¤ì¹˜ ë˜ì–´ìˆì–´ì•¼ í•©ë‹ˆë‹¤.
+		'** Windows 2003 ì¼ ê²½ìš°ëŠ” DLLì„ ë“±ë¡í•˜ì‹œë˜ì§€, CDOë©”ì¼ë¡œ Sourceë¥¼ ì•½ê°„ ìˆ˜ì •í•˜ì…”ì„œ ì‚¬ìš©í•˜ì‹œê¸° ë°”ëë‹ˆë‹¤
+		'** ì‚¬ìš©ì‹œì—ëŠ” ì£¼ì„ì„ ì œê±° í•˜ê³  ì‚¬ìš©í•˜ì—¬ ì£¼ì„¸ìš”
 
-		'** ¡Ø CDO sendmail ¿ë ÇÔ¼ö°¡ ÀÖÀ½ - oCls.OutSendToMail()
+		'** â€» CDO sendmail ìš© í•¨ìˆ˜ê°€ ìˆìŒ - oCls.OutSendToMail()
 
 		Dim strLogFileName : strLogFileName = oCls.LogFileName
-		'oCls.Sendmail "º¸³»´Â»ç¶÷<send@sendmail.com>", "¹Ş´Â»ç¶÷<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & "¹é¾÷ÀÌ µÇ¾ú½À´Ï´Ù", "³Ã¹«",1, 1, 0
+		'oCls.Sendmail "ë³´ë‚´ëŠ”ì‚¬ëŒ<send@sendmail.com>", "ë°›ëŠ”ì‚¬ëŒ<receive@receive.com>", ToYMDDate(date()) & chr(9) & strLogFileName & "ë°±ì—…ì´ ë˜ì—ˆìŠµë‹ˆë‹¤", "ëƒ‰ë¬´",1, 1, 0
 		'oCls.OutSendToMail mailServer, mailServerPort, mailServerUseSSL, isAuth, user, password,  FromUN, FromUA, strTo, strSubject, strBody
 		
 		' Gmail CDO send mail
@@ -83,18 +83,18 @@
 
 '*****************************************************************************************************
 '
-'	¡Ø ¾Æ·¡ ºÎÅÍ´Â Å¬·¡½º ³»¿ëÀÔ´Ï´Ù. 
-'	¼öÁ¤ÇÏ½Ç ¼ö ÀÖ´Â ´É·ÂÀÌ ÀÖÀ¸½Å ºĞµéÀº ¼öÁ¤ÇÏ¼Å¼­ ´õ ÁÁ°Ô »ç¿ëÇÏ¼Åµµ ¹«¹æÇÕ´Ï´Ù :)
-'	Á» ´õ ÁÁÀº ¾ÆÀÌµğ¾î ÀÖÀ¸½Å ºĞµé Contact ÇØÁÖ¼¼¿ä!!!
+'	â€» ì•„ë˜ ë¶€í„°ëŠ” í´ë˜ìŠ¤ ë‚´ìš©ì…ë‹ˆë‹¤. 
+'	ìˆ˜ì •í•˜ì‹¤ ìˆ˜ ìˆëŠ” ëŠ¥ë ¥ì´ ìˆìœ¼ì‹  ë¶„ë“¤ì€ ìˆ˜ì •í•˜ì…”ì„œ ë” ì¢‹ê²Œ ì‚¬ìš©í•˜ì…”ë„ ë¬´ë°©í•©ë‹ˆë‹¤ :)
+'	ì¢€ ë” ì¢‹ì€ ì•„ì´ë””ì–´ ìˆìœ¼ì‹  ë¶„ë“¤ Contact í•´ì£¼ì„¸ìš”!!!
 '	
 '	Class iisLogBackup Ver 1.2
 '
-'	±ÍÂ÷´ÏÁò ¶§¹®¿¡ ¸¸µé°Ô µÈ iisLogBackup Script
-'	·Î±× ÆÄÀÏ ¾ĞÃà ±×¸®°í »èÁ¦¸¦ ¸¶¿ì½º Å¬¸¯ÇÏ´À¶ó Èûµé¾ú´ø ¼Õ°¡¶ô¿¡°Ô ÀÌ ¿µ±¤À»...
-'	windows server administrator ¿¡°Ô ÆòÈ­¿Í ¾È½ÄÀ» ¹Ù¶ó¸ç......
+'	ê·€ì°¨ë‹ˆì¦˜ ë•Œë¬¸ì— ë§Œë“¤ê²Œ ëœ iisLogBackup Script
+'	ë¡œê·¸ íŒŒì¼ ì••ì¶• ê·¸ë¦¬ê³  ì‚­ì œë¥¼ ë§ˆìš°ìŠ¤ í´ë¦­í•˜ëŠë¼ í˜ë“¤ì—ˆë˜ ì†ê°€ë½ì—ê²Œ ì´ ì˜ê´‘ì„...
+'	windows server administrator ì—ê²Œ í‰í™”ì™€ ì•ˆì‹ì„ ë°”ë¼ë©°......
 '
 '	2006. 01. 25.			modify : 2006. 12. 29.
-'	Contact : Ssemi¢â	(http://www.ssemi.net)
+'	Contact : Ssemiâ„¢	(http://www.ssemi.net)
 '	
 '	Dev Blog : http://ssemi.tistory.com
 '*****************************************************************************************************
@@ -108,14 +108,14 @@ CLASS iisLogBackup
 	
 	'----------------------------------------------------------------------------------------------------
 	
-	'** °¢Á¾ °´Ã¼ º¯¼ö
+	'** ê°ì¢… ê°ì²´ ë³€ìˆ˜
 	Dim Shell
 	Dim FSO
 	Dim Folder
 	Dim File
 	Dim WshShell
 	
-	'** °øÅë Member º¯¼ö
+	'** ê³µí†µ Member ë³€ìˆ˜
 	Private CMD
 	Private isLogFile
 	Private m_FolderName
@@ -123,7 +123,7 @@ CLASS iisLogBackup
 	Private m_LogFile
 	Private PathHere 
 
-	'** ½ÇÁ¦·Î ÇÁ·ÎÆÛÆ¼ÀÇ °ªÀ» º¸°üÇÒ Member º¯¼ö
+	'** ì‹¤ì œë¡œ í”„ë¡œí¼í‹°ì˜ ê°’ì„ ë³´ê´€í•  Member ë³€ìˆ˜
     Private m_LogType
     Private m_LogBackupOption
 	Private m_ForceLogFile
@@ -133,7 +133,7 @@ CLASS iisLogBackup
 
 	'----------------------------------------------------------------------------------------------------
 
-	'** ÇÁ·ÎÆÛÆ¼¿¡ °ªÀ» ¼³Á¤ÇÒ ¶§ È£ÃâµÈ´Ù.
+	'** í”„ë¡œí¼í‹°ì— ê°’ì„ ì„¤ì •í•  ë•Œ í˜¸ì¶œëœë‹¤.
     Public Property Let LogType(strArg)
 		m_LogType = strArg
 	End Property
@@ -162,7 +162,7 @@ CLASS iisLogBackup
 		IF FSO.FolderExists(strArg) Then
 			SET Folder = FSO.GetFolder(strArg) 
 		ELSE
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) & "[" & strArg &"] Æú´õ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) & "[" & strArg &"] í´ë”ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤")
 		End IF
 		m_FolderName = strArg
 	End Property
@@ -170,21 +170,21 @@ CLASS iisLogBackup
 	Public Property Let SetMoveFolder(strArg) 
 		IF NOT FSO.FolderExists(strArg) Then
 			FSO.CreateFolder(strArg) 
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) &"¾ĞÃàÇÑ ÆÄÀÏÀ» ÀÌµ¿ÇÒ [" & strArg &"] Æú´õ »ı¼º")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & ""& chr(9) &"ì••ì¶•í•œ íŒŒì¼ì„ ì´ë™í•  [" & strArg &"] í´ë” ìƒì„±")
 		End IF
 		m_moveFolderName = strArg
 	End Property	
 
 	'----------------------------------------------------------------------------------------------------
 	
-	'** ÇÁ·ÎÆÛÆ¼¿¡¼­ °ªÀ» ÀĞ¾î°¥ ¶§ È£ÃâµÈ´Ù.
+	'** í”„ë¡œí¼í‹°ì—ì„œ ê°’ì„ ì½ì–´ê°ˆ ë•Œ í˜¸ì¶œëœë‹¤.
     Public Property Get LogFileName()
       LogFileName = m_LogBackupFileName
     End Property
 
 	'----------------------------------------------------------------------------------------------------
 	
-	'** ·Î±× ÆÄÀÏ Ã¼Å©
+	'** ë¡œê·¸ íŒŒì¼ ì²´í¬
 	Private Function ExistsLogFile()
 
 		IF isObject(Folder) Then
@@ -204,14 +204,14 @@ CLASS iisLogBackup
 	End Function 
 
 
-	'** ·Î±× ÆÄÀÏ Æ÷¸ËÆÃ
+	'** ë¡œê·¸ íŒŒì¼ í¬ë§·íŒ…
 	Private Function changeFormat(str)
 	
 		Dim tempstr, currentWeek
 		
 		Select Case Lcase(m_LogBackupOption)
 
-			Case "m" :  'ÇÑ´Ş
+			Case "m" :  'í•œë‹¬
 				tempstr = DateAdd("m", -1 , ToYMDDate(date()))
 				currentWeek = "0" & Cstr(DatePart("ww", tempstr) - DatePart("ww", Year(tempstr) & "-" & Month(tempstr) & "-01") + 1)
 
@@ -221,7 +221,7 @@ CLASS iisLogBackup
 				str = Replace(str, "ww", "")
 				str = Replace(str, "dd", "")
 
-			Case "h" : ' º¸¸§
+			Case "h" : ' ë³´ë¦„
 				tempstr = DateAdd("d", -15 , ToYMDDate(date()))
 				currentWeek = "0" & Cstr(DatePart("ww", tempstr) - DatePart("ww", Year(tempstr) & "-" & Month(tempstr) & "-01") + 1)
 
@@ -236,14 +236,14 @@ CLASS iisLogBackup
 					str = Replace(str, "ww", "half_1")
 				End IF
 				
-			Case "d" :  ' 1ÀÏ
+			Case "d" :  ' 1ì¼
 				tempstr = DateAdd("d", -1 , ToYMDDate(date()))
 				str = Replace(str, "yyyy", Split(tempstr, "-")(0))
 				str = Replace(str, "yy", Right(Split(tempstr, "-")(0), 2))
 				str = Replace(str, "mm", Split(tempstr, "-")(1))
 				str = Replace(str, "dd", Split(tempstr, "-")(2))
 
-			Case "n" :  ' °­Á¦
+			Case "n" :  ' ê°•ì œ
 				currentWeek = "0" & Cstr(DatePart("ww", ToYMDDate(date())) - DatePart("ww", Year(ToYMDDate(date())) & "-" & Month(ToYMDDate(date())) & "-01") + 1)  & "w"
 				str = Replace(str, "yyyy", Split(ToYMDDate(date()), "-")(0))
 				str = Replace(str, "yy", Right(Split(ToYMDDate(date()), "-")(0), 2))
@@ -264,21 +264,21 @@ CLASS iisLogBackup
 	End Function
 
 
-	'** ·Î±× ÆÄÀÏ ÄÚµğ³×ÀÌÅÍ
+	'** ë¡œê·¸ íŒŒì¼ ì½”ë””ë„¤ì´í„°
 	Private Sub LogFileCoordinator()
 
 		Dim tmp, standard
 		Dim y, m, d, w
 
-		' ·Î±×¹é¾÷¿É¼ÇÀ» ÅëÇÑ ±âÁØÀÏ »ı¼º
+		' ë¡œê·¸ë°±ì—…ì˜µì…˜ì„ í†µí•œ ê¸°ì¤€ì¼ ìƒì„±
 		Select Case Lcase(m_LogBackupOption)
-			Case "m" : 'ÇÑ´Ş month
+			Case "m" : 'í•œë‹¬ month
 				standard = DateAdd("m", -1 , ToYMDDate(date()))
-			Case "h" :  '15ÀÏ º¸¸§
+			Case "h" :  '15ì¼ ë³´ë¦„
 				standard = DateAdd("d", -15, ToYMDDate(date()))
-			Case "d" :  '1ÀÏ day
+			Case "d" :  '1ì¼ day
 				standard = DateAdd("d", -1 , ToYMDDate(date()))
-			Case "n" :  '°­Á¦ non
+			Case "n" :  'ê°•ì œ non
 				standard = ToYMDDate(date())
 		End Select
 
@@ -287,7 +287,7 @@ CLASS iisLogBackup
 		IF Cstr(d) < 10 Then d = "0" & Cstr(d) ELSE d = Cstr(d) End IF
 		IF Cstr(w) < 10 Then w = "0" & Cstr(w) ELSE w = Cstr(w) End IF
 
-		' ·Î±×¹é¾÷ Å¸ÄÏÆÄÀÏ¸í »ı¼º
+		' ë¡œê·¸ë°±ì—… íƒ€ì¼“íŒŒì¼ëª… ìƒì„±
 		Dim min , max, i 
 		Select Case Lcase(m_LogBackupOption)
 			Case "m" : 
@@ -350,7 +350,7 @@ CLASS iisLogBackup
 '					Next
 					'----------------------------------------------------------------------------------------
 				ELSE
-					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLogÀÇ ¹é¾÷µÈ ÆÄÀÏ Å¸ÀÔ ¼³Á¤ÀÌ [ÀÏÀÏ ±âÁØ] or [ÁÖ ±âÁØ]ÀÌ ¾Æ´Õ´Ï´Ù")
+					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLogì˜ ë°±ì—…ëœ íŒŒì¼ íƒ€ì… ì„¤ì •ì´ [ì¼ì¼ ê¸°ì¤€] or [ì£¼ ê¸°ì¤€]ì´ ì•„ë‹™ë‹ˆë‹¤")
 
 				End IF
 
@@ -361,7 +361,7 @@ CLASS iisLogBackup
 					m_LogFile = "u_ex" & y & m & d & ".log"
 					Call LogFileBackup(m_LogBackupFileName, m_FolderName & m_LogFile, "a -tzip")
 				ELSE
-					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLogÀÇ ¹é¾÷µÈ ÆÄÀÏ Å¸ÀÔ ¼³Á¤ÀÌ [ÀÏÀÏ ±âÁØ]ÀÌ ¾Æ´Õ´Ï´Ù")
+					IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "iisLogì˜ ë°±ì—…ëœ íŒŒì¼ íƒ€ì… ì„¤ì •ì´ [ì¼ì¼ ê¸°ì¤€]ì´ ì•„ë‹™ë‹ˆë‹¤")
 				End IF
 
 			Case "n" : 
@@ -387,7 +387,7 @@ CLASS iisLogBackup
 
 
 
-	'** ·Î±× ÆÄÀÏ ¹é¾÷ ÇÁ·Î½ÃÁ®
+	'** ë¡œê·¸ íŒŒì¼ ë°±ì—… í”„ë¡œì‹œì ¸
 	Private Sub LogFileBackup(zip, target, typeOption)
 		'IF FSO.FileExists(target) Then
 			
@@ -397,25 +397,25 @@ CLASS iisLogBackup
 			Shell.Run cmd , , True
 
 			IF typeOption = "u" Then
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] ÆÄÀÏÀ» ["& zip &"] ÆÄÀÏ·Î ¾ĞÃà <¾÷µ¥ÀÌÆ®>")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] íŒŒì¼ì„ ["& zip &"] íŒŒì¼ë¡œ ì••ì¶• <ì—…ë°ì´íŠ¸>")
 			ELSE
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] ÆÄÀÏÀ» ["& zip &"] ÆÄÀÏ·Î ¾ĞÃà ¼º°ø")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] íŒŒì¼ì„ ["& zip &"] íŒŒì¼ë¡œ ì••ì¶• ì„±ê³µ")
 			End IF
 
 			' log file del
 			IF m_logBackupAfterDelete = 1 Then
 				FSO.DELETEFILE target, True
-				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] ÆÄÀÏÀ» »èÁ¦ÇÏ¿´½À´Ï´Ù")
+				IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() &  chr(9) & "[" & target & "] íŒŒì¼ì„ ì‚­ì œí•˜ì˜€ìŠµë‹ˆë‹¤")
 			End IF
 		'ELSE
-			'IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & target & "] ÆÄÀÏÀ» Ã£À» ¼ö°¡ ¾ø½À´Ï´Ù")
+			'IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & target & "] íŒŒì¼ì„ ì°¾ì„ ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤")
 		'End IF
 	End Sub
 
 
-	'** ·Î±× ¹é¾÷ ½ÇÇà
+	'** ë¡œê·¸ ë°±ì—… ì‹¤í–‰
 	Public Sub Exec()
-		'°­Á¦ ¸ğµåÀÏ ¶§ ÆÄÀÏ ÀÌ¸§ ¾øÀ¸¸é ¿¡·¯ 
+		'ê°•ì œ ëª¨ë“œì¼ ë•Œ íŒŒì¼ ì´ë¦„ ì—†ìœ¼ë©´ ì—ëŸ¬ 
 		IF m_LogBackupOption = "n" AND Len(m_ForceLogFile) = 0  Then
 			Wscript.Echo "No File parameter was passed ( force mode )"
 			Call TerminateClass
@@ -435,13 +435,13 @@ CLASS iisLogBackup
 					IF NOT FSO.FileExists(m_moveFolderName & "\" & m_LogBackupFileName) Then
 						Call ErrorReport(NOW() & chr(9) & "Move " & PathHere & "\" & m_LogBackupFileName & ", " & m_moveFolderName & "\" )
 						FSO.MoveFile PathHere & "\" & m_LogBackupFileName , m_moveFolderName & "\" 
-						IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & PathHere & "\" & m_LogBackupFileName &"] ÆÄÀÏÀÌ ["& m_moveFolderName &"]·Î ÀÌµ¿µÇ¾ú½À´Ï´Ù")
+						IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "[" & PathHere & "\" & m_LogBackupFileName &"] íŒŒì¼ì´ ["& m_moveFolderName &"]ë¡œ ì´ë™ë˜ì—ˆìŠµë‹ˆë‹¤")
 					End IF
 				End IF
 			End IF
 
 		ELSE
-			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& m_FolderName &"] Æú´õ¿¡ ·Î±× ÆÄÀÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù")
+			IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& m_FolderName &"] í´ë”ì— ë¡œê·¸ íŒŒì¼ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤")
 		End IF
 
 		IF m_LogReportWrite = 1 Then Call ErrorReport(String(100, "-"))
@@ -480,7 +480,7 @@ CLASS iisLogBackup
 				F.WriteLine String(100, "-")
 				F.WriteLine chr(9) & "Windows IIS Log Backup Script Ver1.2 " & chr(9) & chr(9) & "2006. 12. 29."
 				F.WriteLine vbCr
-				F.WriteLine chr(9) & "Contact : Ssemi¢â (http://www.ssemi.net) "
+				F.WriteLine chr(9) & "Contact : Ssemiâ„¢ (http://www.ssemi.net) "
 				F.WriteLine String(100, "-")
 			SET F = Nothing
 		End IF
@@ -505,7 +505,7 @@ CLASS iisLogBackup
 			objSendMail.Importance = Importance ' 0 low / 1 normal / 2 importance
 			objSendMail.Send
 			SET objSendMail = Nothing
-		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]·Î Á¦¸ñ : ["& strSubject &"] ¸ŞÀÏÀ» º¸³Â½À´Ï´Ù")
+		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]ë¡œ ì œëª© : ["& strSubject &"] ë©”ì¼ì„ ë³´ëƒˆìŠµë‹ˆë‹¤")
 
 	End Sub
 
@@ -547,11 +547,11 @@ CLASS iisLogBackup
 			.Send
 		End With
 
-		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]·Î Á¦¸ñ : ["& strSubject &"] ¸ŞÀÏÀ» º¸³Â½À´Ï´Ù")
+		IF m_LogReportWrite = 1 Then Call ErrorReport(NOW() & chr(9) & "["& strTo &"]ë¡œ ì œëª© : ["& strSubject &"] ë©”ì¼ì„ ë³´ëƒˆìŠµë‹ˆë‹¤")
 
 	End Function
 
-	' duplicate file Ã³¸®
+	' duplicate file ì²˜ë¦¬
 	Function newFileName(name)
 		Dim Num : Num = 1
 		Dim tempNum, removeNo, tmpFile
@@ -572,7 +572,7 @@ CLASS iisLogBackup
 	
 End Class
 
-' YYYY-MM-DD Çü½ÄÀ¸·Î º¯°æ
+' YYYY-MM-DD í˜•ì‹ìœ¼ë¡œ ë³€ê²½
 Function ToYMDDate(dt)
 	dim s
 	s = datepart("yyyy",dt)
